@@ -1,19 +1,8 @@
-# 🔥 GitHub Streak Extension
+# 🔥 Repo Revive
 
-A browser extension that displays your GitHub contribution streak with a dynamic fire icon — similar to Snapchat or LeetCode streaks. Keep the fire burning by pushing code daily!
-
----
-
-## 📖 Overview
+A CLI tool that analyzes your GitHub repositories and helps you re-engage with abandoned projects. Find your forgotten side projects and get actionable steps to revive them.
 
 ![alt text](image.png)
-
-This extension tracks your daily GitHub contributions and displays a streak counter on your GitHub profile. The concept is simple:
-
-- **Push code daily** → Fire keeps burning 🔥
-- **Miss a day** → Streak resets to 0 ❄️
-
-The visual fire indicator grows more intense as your streak increases, motivating you to maintain consistent coding habits.
 
 ---
 
@@ -21,141 +10,127 @@ The visual fire indicator grows more intense as your streak increases, motivatin
 
 | Feature | Description |
 |---------|-------------|
-| **Streak Counter** | Shows consecutive days of contributions |
-| **Dynamic Fire Icon** | Visual indicator that intensifies with longer streaks |
-| **Profile Badge** | Embeddable badge for your GitHub profile README |
-| **Streak Milestones** | Special animations at 7, 30, 100, 365 days |
-| **Timezone Support** | Accurate tracking based on your local timezone |
+| **Cold Repo Detection** | Finds repos with no commits in 30+ days |
+| **Smart Filtering** | Excludes forks and archived repos automatically |
+| **Re-entry Briefs** | Generates actionable next steps for each repo |
+| **Priority Sorting** | Shows most revivable repos first |
+| **Customizable** | Adjust inactivity threshold and result limit |
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/ADITYABHURAN/GitHub-streak-extension.git
+
+# Navigate to the CLI tool
+cd GitHub-streak-extension/repo-revive
+
+# Install dependencies
+npm install
+
+# Create your .env file with GitHub token
+echo "GITHUB_TOKEN=your_token_here" > .env
+
+# Run the tool
+npm start
+```
+
+---
+
+## 🔑 Getting a GitHub Token
+
+1. Go to [GitHub Settings → Developer Settings → Personal Access Tokens](https://github.com/settings/tokens/new)
+2. Generate a new token (classic) with `repo` scope
+3. Copy the token and add it to your `.env` file
+
+---
+
+## 📖 Usage
+
+```bash
+# Default: 30 days threshold, 5 repos
+npm start
+
+# Custom inactivity threshold (60 days)
+npm start -- --days 60
+
+# Show more repos
+npm start -- --limit 10
+
+# Combine options
+npm start -- --days 14 --limit 3
+```
+
+---
+
+## 📦 Example Output
+
+```
+🔍 Repo Revive Report
+Found 12 cold repos (no activity in 30+ days)
+──────────────────────────────────────────────────
+
+📦 my-old-project
+   Last commit: 45 days ago — "Add user authentication"
+   Language: TypeScript
+   Description: A REST API for task management
+   Re-entry actions:
+     1. Review the newly added feature and consider enhancements
+     2. Add or improve API endpoints and error handling
+     3. Check if dependencies are outdated and update them
+
+📦 another-project
+   Last commit: 120 days ago — "WIP: refactor database layer"
+   Language: Python
+   Re-entry actions:
+     1. Continue the work-in-progress from the last session
+     2. Write or improve the README with clear setup instructions
+     3. Check if dependencies are outdated and update them
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Component | Technology |
+|-----------|------------|
+| Runtime | Node.js + TypeScript |
+| GitHub API | @octokit/rest |
+| CLI Framework | Commander.js |
+| Terminal Styling | Chalk |
+| Environment | dotenv |
+
+---
+
+## 📁 Project Structure
+
+```
+repo-revive/
+├── src/
+│   ├── index.ts        # CLI entry point
+│   ├── github.ts       # GitHub API calls
+│   ├── analyze.ts      # Cold repo detection logic
+│   └── output.ts       # Terminal formatting
+├── .env.example        # Template for environment variables
+├── .gitignore
+├── package.json
+└── tsconfig.json
+```
 
 ---
 
 ## 🎯 How It Works
 
-1. **Fetch Contribution Data** — Uses GitHub's contribution graph/API to get your activity
-2. **Calculate Streak** — Counts consecutive days with at least 1 contribution
-3. **Display Badge** — Renders a fire icon with streak count
-4. **Update Daily** — Automatically refreshes to show current streak
-
-### Streak Rules
-- A "contribution" counts as: commits, PRs, issues, or code reviews
-- The streak resets if you miss a full calendar day (in your timezone)
-- Today doesn't count until you've made a contribution
-
----
-
-## 🛠️ Tech Stack (Planned)
-
-| Component | Technology |
-|-----------|------------|
-| Extension | JavaScript / Chrome Extension API |
-| Badge Generator | SVG + Canvas API |
-| Data Fetching | GitHub GraphQL API / Scraping contribution graph |
-| Hosting (for badge) | Vercel / Cloudflare Workers (optional) |
-
----
-
-## 📐 Architecture
-
-```
-┌─────────────────────────────────────────────────────┐
-│                  GitHub Profile                      │
-│  ┌───────────────────────────────────────────────┐  │
-│  │  ![Streak Badge](streak-badge-url)            │  │
-│  │                                               │  │
-│  │         🔥 42 Day Streak                      │  │
-│  │                                               │  │
-│  └───────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────┐
-│              Streak Calculator Service              │
-│  • Fetches GitHub contribution data                 │
-│  • Calculates current streak                        │
-│  • Generates SVG badge with fire animation          │
-└─────────────────────────────────────────────────────┘
-```
-
----
-
-## 🚀 Planned Components
-
-### 1. Browser Extension
-- Injects streak badge into GitHub profile page
-- Shows popup with streak stats
-- Sends notifications for streak reminders
-
-### 2. Embeddable Badge (Optional)
-- SVG badge you can add to your profile README
-- Auto-updates without needing the extension
-- Example: `![GitHub Streak](https://your-service.com/streak/username)`
-
-### 3. Fire Intensity Levels
-
-| Days | Fire Level | Visual |
-|------|------------|--------|
-| 1-6 | Spark | 🔸 Small flame |
-| 7-29 | Flame | 🔥 Regular fire |
-| 30-99 | Blaze | 🔥🔥 Double fire |
-| 100-364 | Inferno | 🔥🔥🔥 Triple fire |
-| 365+ | Legendary | ⭐🔥⭐ Special animation |
-
----
-
-## 📋 Development Roadmap
-
-### Phase 1: Core Functionality
-- [ ] Set up Chrome extension boilerplate
-- [ ] Fetch GitHub contribution data
-- [ ] Calculate streak from contribution graph
-- [ ] Display basic streak counter
-
-### Phase 2: Visual Design
-- [ ] Design fire icon/animation
-- [ ] Create streak badge SVG
-- [ ] Add intensity levels
-- [ ] Style popup UI
-
-### Phase 3: Advanced Features
-- [ ] Streak reminders/notifications
-- [ ] Timezone configuration
-- [ ] Historical streak data
-- [ ] Embeddable badge service
-
-### Phase 4: Polish & Release
-- [ ] Chrome Web Store submission
-- [ ] Firefox add-on support
-- [ ] Documentation
-- [ ] Landing page
-
----
-
-## 🔧 Installation (Coming Soon)
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/github-streak-extension.git
-
-# Navigate to project
-cd github-streak-extension
-
-# Install dependencies
-npm install
-
-# Build extension
-npm run build
-
-# Load in Chrome: chrome://extensions → Load unpacked → select /dist
-```
-
----
-
-## 📝 Usage (Coming Soon)
-
-1. Install the extension
-2. Navigate to any GitHub profile
-3. See the streak badge appear on the profile
-4. Click the extension icon to see detailed stats
+1. **Authenticate** — Uses your GitHub Personal Access Token
+2. **Fetch Repos** — Gets all your repositories via GitHub API
+3. **Filter** — Removes forks and archived repos
+4. **Analyze** — Identifies repos with no recent commits
+5. **Generate Briefs** — Creates actionable re-entry steps based on:
+   - Last commit message keywords (WIP, fix, add, refactor, etc.)
+   - Repository description (API, CLI, web, etc.)
+6. **Sort & Display** — Prioritizes recently abandoned over very old repos
 
 ---
 
@@ -173,11 +148,10 @@ MIT License - Feel free to use and modify!
 
 ## 💡 Inspiration
 
+- The guilt of abandoned side projects 😅
 - Snapchat Streaks 👻
-- LeetCode Daily Challenges 💻
-- Duolingo Streaks 🦉
 - GitHub Contribution Graph 📊
 
 ---
 
-**Let's keep the fire burning! 🔥**
+**Stop forgetting your projects. Revive them. 🔥**
