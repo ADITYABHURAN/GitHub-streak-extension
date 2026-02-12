@@ -6,6 +6,8 @@ A browser extension that displays your GitHub contribution streak with a dynamic
 
 ## 📖 Overview
 
+![alt text](image.png)
+
 This extension tracks your daily GitHub contributions and displays a streak counter on your GitHub profile. The concept is simple:
 
 - **Push code daily** → Fire keeps burning 🔥
